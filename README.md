@@ -4,7 +4,7 @@
   <img src="https://github.com/nmudd037/subscriptionChallenge/blob/master/examples/user-preferences.png" alt="User Preferences" width="100%">
 </h2>
 
-## Reguirements:
+## Requirements:
 
 Based on the above picture as reference,
 

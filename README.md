@@ -1,7 +1,7 @@
 # Subscription Card Challenge
 
 <h2 align="center">
-  <img src="#" alt="User Preferences" width="100%">
+  <img src="https://github.com/nmudd037/subscriptionChallenge/blob/master/examples/user-preferences.png" alt="User Preferences" width="100%">
 </h2>
 
 ## Reguirements:
@@ -15,10 +15,10 @@ Based on the above picture as reference,
 
 ## Working Interface
 
-The working demo of the Challenge[Subscription Card](https://github.com/facebook/create-react-app).
+The working demo of the Challenge [Subscription Card](https://subscription-ts-chalenge.vercel.app/).
 
 <h2 align="center">
-  <img src="#" alt="Working Interface GIF" width="660px" />
+  <img src="https://github.com/nmudd037/subscriptionChallenge/blob/master/examples/working-interface-gif.gif" alt="Working Interface GIF" width="660px" />
   <br>
 </h2>
 

@@ -1,70 +1,90 @@
-# Getting Started with Create React App
+# Subscription Card Challenge
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<h2 align="center">
+  <img src="#" alt="User Preferences" width="100%">
+</h2>
 
-## Available Scripts
+## Reguirements:
 
-In the project directory, you can run:
+Based on the above picture as reference,
 
-### `npm start`
+- In this implementation, a feature's sub-features only expand when selected on and only the leaves contribute to the overall cost.
+- Create the supporting client-side view using React and TypeScript
+- A feature may have N sub-features. In other words, features and their sub-features are
+  arbitrarily nested.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Working Interface
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+The working demo of the Challenge[Subscription Card](https://github.com/facebook/create-react-app).
 
-### `npm test`
+<h2 align="center">
+  <img src="#" alt="Working Interface GIF" width="660px" />
+  <br>
+</h2>
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Approach, Assumptions and Decision Making Process
 
-### `npm run build`
+- After going through the requirements, the first point I tried to solve was to arrange the code structure based on similar files (separating components) then created two components **Card and CardItem**. The Card component deals with the overall implementation of the Subscription Card and the CardItem deals with the implementation of the subscription features within the card.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- The next step was to make an assumption about the sample data and how to arrange it, so I came up with a identically nested tree data structure. The sample data is an array of subscription feature objects that has an **id, name, value(if no sub features), items(array of subscription feature objects, if only sub features exist)**. The id of each subscription feature is assumed to be of type that it helps us to easily identify the top-level features and the nested features.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```javascript
+export const data = [
+  {
+    id: 1,
+    name: 'Feature 1',
+    items: [
+      {
+        id: 11,
+        name: 'Sub-Feature 1_1',
+        value: 15,
+      },
+      {
+        id: 12,
+        name: 'Sub-Feature 1_2',
+        value: 35,
+      },
+    ],
+  },
+  {
+    id: 2,
+    name: 'Feature 2',
+    items: [
+      {
+        id: 21,
+        name: 'Sub-Feature 2_1',
+        value: 47,
+      },
+      {
+        id: 22,
+        name: 'Sub-Feature 2_2',
+        value: 55,
+      },
+    ],
+  },
+];
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- The main challenge was to render a component that receives an arbitrarily nested data. The component treescan't be rendered in an iterative fashion, instead I relied on using recursion to display the data.
 
-### `npm run eject`
+- One of the cool things about React is that React components are essentially functions which return JSX. Therefore, just like with any other functions, React components can be recursive.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+- In the Card component apart from implementing the base features like the heading and footer of the card, we render the Card Item component inside a unordered list for each top-level feature (object) in the array of subscription feature sample data by passing it as a prop to it.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- We keep a state for managing the Accumulated sub total Price of nested Card Items and pass it's setState function as a prop to the Card Item component. Also, we calculate the total price of the selected features at any instance by
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+- In the Card Item component, We used a default prop **level** to let the component know how deep the instance of Card Item component is at any given time.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+- We return for each feature a list item with a input type of checkbox that store the price of each feature on value attribute of its corresponding input checkbox and use this value to display the price on the card.
 
-## Learn More
+- Here, the recursive call is when the Card Item component renders itself, passing in a modified version of the props it received. We use base case that is a conditional check to determine whether it should render itself again or stop which fulfills our requirement for expanding sub-features only when the parent feature is selected. Each instance has its own state.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- We use two states, one to manage the Accumulated Sub Total Price of nested Card Items and one to manage the display of nested Card Items only when Parent Card Item is Checked.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+- We use two functions one to calculate the Sub Total Price of nested Card Items for a feature at an instance. one to clear the nested Card Items when a Card Item is unchecked.
 
-### Code Splitting
+- We use the useEffect hook to do update price state by using its setState that is passed as prop for each instance of nested Card Item on each render. (The Sub Total Price is lifted to the Parent Card Item on each render that in turn return the total price if the card at that instance.)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+- On the input type of checkbox for each feature, we attach a Change Event Handler. The onChange event handler does two things, one to toggle the display of nested Card Items and one to manage the subTotal state, when the Card Item is checked the price is stored in the state otherwise the price is cleared from the state.
 
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- Considerations: If the data is too large, we could flatten the data received and follow a different approach to solve the problem.
